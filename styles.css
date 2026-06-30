@@ -33,16 +33,16 @@ html, body {
   width: 100%;
   font-family: var(--sans);
   color: var(--ink);
-  background: linear-gradient(135deg, var(--bg-1) 0%, var(--bg-2) 30%, var(--bg-3) 70%, var(--bg-4) 100%);
-  background-size: 200% 200%;
-  background-attachment: fixed;
-  animation: bgShift 30s ease-in-out infinite;
+  /* Static gradient — no background-attachment:fixed and no animated
+     background-position. Those two together force a full-screen repaint
+     every frame, which is harmless on a desktop GPU but causes severe jank
+     on mobile Safari. The jank dropped frames, which made the confetti and
+     sparkles visibly stutter/jump ("everything super fast") on phones while
+     looking fine on the laptop. A plain static gradient is bulletproof. */
+  background: linear-gradient(135deg, var(--bg-1) 0%, var(--bg-2) 25%, var(--bg-3) 60%, var(--bg-4) 100%);
+  background-attachment: scroll;
   -webkit-font-smoothing: antialiased;
   scroll-behavior: smooth;
-}
-@keyframes bgShift {
-  0%, 100% { background-position: 0% 50%; }
-  50%      { background-position: 100% 50%; }
 }
 
 h1, h2, h3 { font-family: var(--serif); font-weight: 700; letter-spacing: -0.01em; }

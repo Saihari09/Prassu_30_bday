@@ -12,7 +12,11 @@ document.getElementById('footerYear').textContent = new Date().getFullYear();
   if (!layer) return;
   const glyphs = ['✦', '✧', '✦', '✨', '★', '✺', '·'];
   const colors = ['#ff5a99', '#ffb627', '#ffffff', '#5ee0c1', '#ff9a78', '#d62a78'];
-  const COUNT = 22;
+  // Each sparkle is a GPU-composited (will-change) layer. 22 is fine on a
+  // laptop but heavy on a phone, where it adds to the compositing load.
+  // Use fewer on small screens — they also read denser on a small screen, so
+  // fewer looks the same anyway.
+  const COUNT = (document.documentElement.clientWidth < 700) ? 12 : 22;
   for (let i = 0; i < COUNT; i++) {
     const s = document.createElement('span');
     s.className = 'sparkle-particle';
@@ -216,8 +220,11 @@ function tickConfetti(now) {
   if (confettiLastTime == null) confettiLastTime = now;
   const rawDelta = now - confettiLastTime;
   confettiLastTime = now;
-  // cap at 3x a normal frame so a backgrounded-tab resume doesn't teleport particles
-  const steps = Math.min(rawDelta / (1000 / 60), 3);
+  // Cap at 1.5x a normal frame. If the phone briefly janks (a dropped frame),
+  // we'd otherwise integrate a big delta and the particles would visibly jump
+  // forward — reading as "too fast". Capping low means a stutter just makes
+  // the confetti run very slightly slow for that instant instead of leaping.
+  const steps = Math.min(rawDelta / (1000 / 60), 1.5);
 
   const w = confettiCanvas.clientWidth;
   const h = confettiCanvas.clientHeight;
