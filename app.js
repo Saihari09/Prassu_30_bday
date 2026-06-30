@@ -131,10 +131,16 @@ let confettiAnimating = false;
 
 function sizeConfetti() {
   const dpr = window.devicePixelRatio || 1;
-  confettiCanvas.width = window.innerWidth * dpr;
-  confettiCanvas.height = window.innerHeight * dpr;
-  confettiCanvas.style.width = window.innerWidth + 'px';
-  confettiCanvas.style.height = window.innerHeight + 'px';
+  // documentElement.clientWidth/clientHeight is the CSS layout viewport size —
+  // more reliable than window.innerWidth/innerHeight, which can read wider
+  // than the visible screen if any element overflows the page, and which
+  // jumps around on mobile Safari as the address bar shows/hides.
+  const vw = document.documentElement.clientWidth;
+  const vh = document.documentElement.clientHeight;
+  confettiCanvas.width = vw * dpr;
+  confettiCanvas.height = vh * dpr;
+  confettiCanvas.style.width = vw + 'px';
+  confettiCanvas.style.height = vh + 'px';
   ctx.setTransform(1, 0, 0, 1, 0, 0);
   ctx.scale(dpr, dpr);
 }
@@ -831,8 +837,12 @@ function placeHearts() {
     if (!sectionEl) return;
     const btn = document.createElement('button');
     btn.className = 'hidden-heart';
-    btn.style.top = top;
-    btn.style.left = left;
+    // clamp() keeps every heart at least 4px from any edge and at most
+    // "100% minus its own width" from the top/left edge — so a heart placed
+    // at e.g. left:96% can never push its tappable circle past the right
+    // edge of a narrow phone screen, regardless of section width.
+    btn.style.top = `clamp(4px, ${top}, calc(100% - 26px))`;
+    btn.style.left = `clamp(4px, ${left}, calc(100% - 26px))`;
     btn.dataset.idx = i;
     btn.setAttribute('aria-label', 'A hidden heart');
     if (foundHearts.has(i)) {

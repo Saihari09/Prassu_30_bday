@@ -25,6 +25,12 @@
 html, body {
   margin: 0;
   padding: 0;
+  /* Hard guard: any one element that overflows the viewport width (e.g. a
+     fixed-px-width element on a narrow phone) would otherwise widen the
+     whole page's layout viewport, throwing off every position/percentage
+     and window.innerWidth-based sizing (confetti, sparkles) on the page. */
+  overflow-x: hidden;
+  width: 100%;
   font-family: var(--sans);
   color: var(--ink);
   background: linear-gradient(135deg, var(--bg-1) 0%, var(--bg-2) 30%, var(--bg-3) 70%, var(--bg-4) 100%);
@@ -1422,8 +1428,29 @@ h1, h2, h3 { font-family: var(--serif); font-weight: 700; letter-spacing: -0.01e
 /* ============ mobile ============ */
 @media (max-width: 600px) {
   .section { padding: 56px 16px; }
-  .nav { gap: 12px; font-size: 0.8rem; padding: 12px 10px; }
-  .nav a { font-size: 0.8rem; }
+  /* Nav has 7 links + a mute button — too many to fit a 375px screen without
+     shrinking text unreadably. Let it scroll horizontally instead, so every
+     item stays tappable and full-size rather than overflowing/clipping. */
+  .nav {
+    gap: 14px;
+    font-size: 0.8rem;
+    padding: 12px 20px;
+    justify-content: flex-start;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+  .nav::-webkit-scrollbar { display: none; }
+  .nav a, .nav .mute-btn { flex-shrink: 0; }
+  .nav a { font-size: 0.85rem; padding: 10px 2px; }
+  .mute-btn { width: 40px; height: 40px; }
+  .teaser-stack { width: 280px; height: 220px; }
+  .teaser-stack .teaser-card { width: 112px; height: 138px; padding: 7px 7px 10px; }
+  .teaser-stack .teaser-card:nth-child(1) { transform: translate(-50%, -50%) rotate(-12deg) translateX(-86px); }
+  .teaser-stack .teaser-card:nth-child(2) { transform: translate(-50%, -50%) rotate(-6deg) translateX(-43px); }
+  .teaser-stack .teaser-card:nth-child(4) { transform: translate(-50%, -50%) rotate(6deg) translateX(43px); }
+  .teaser-stack .teaser-card:nth-child(5) { transform: translate(-50%, -50%) rotate(12deg) translateX(86px); }
+  .open-album-btn { padding: 14px 28px !important; font-size: 0.95rem !important; }
   .firsts-options { gap: 10px; }
   .firsts-option .label { font-size: 0.85rem; padding: 8px 10px; }
   .firsts-finale { padding: 36px 24px; }
