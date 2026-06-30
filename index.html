@@ -57,6 +57,7 @@
     <a href="#reasons">Reasons</a>
     <a href="#quiz">Quiz</a>
     <a href="#match" id="navMatch">Match</a>
+    <a href="#wishes">Wishes</a>
     <a href="#letter">Letter</a>
     <button id="muteBtn" class="mute-btn" aria-label="Toggle music" title="Toggle music">♫</button>
   </nav>
@@ -144,10 +145,50 @@
     <button class="ghost-btn match-reset" id="matchReset" style="margin-top:24px">↻ shuffle</button>
   </section>
 
+  <!-- ============ 30 WISHES ============ -->
+  <section id="wishes" class="section wishes">
+    <header class="section-head">
+      <p class="eyebrow">Chapter Six</p>
+      <h2>30 Wishes</h2>
+      <p class="lede">Looking forward. One for every year ahead.</p>
+    </header>
+    <div class="wish-card" id="wishCard">
+      <div class="wish-number" id="wishNumber">1</div>
+      <div class="wish-body">
+        <p class="wish-text" id="wishText"></p>
+        <div class="wish-controls">
+          <button id="wishPrev" class="ghost-btn" aria-label="Previous wish">←</button>
+          <span class="wish-progress" id="wishProgress">1 / 30</span>
+          <button id="wishNext" class="primary-btn" aria-label="Next wish">next →</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ STATS BANNER ============ -->
+  <section id="stats" class="stats-banner" aria-label="Our story by the numbers">
+    <div class="stat">
+      <div class="stat-value" id="statYears">0</div>
+      <div class="stat-label">years together</div>
+    </div>
+    <div class="stat">
+      <div class="stat-value" id="statPhotos">0</div>
+      <div class="stat-label">photos</div>
+    </div>
+    <div class="stat">
+      <div class="stat-value" id="statPlaces">0</div>
+      <div class="stat-label">places</div>
+    </div>
+    <div class="stat">
+      <div class="stat-value stat-infinity" id="statMemories">∞</div>
+      <div class="stat-label">memories <span id="statCaption">and counting</span></div>
+    </div>
+  </section>
+
   <!-- ============ LETTER ============ -->
   <section id="letter" class="section letter">
     <header class="section-head">
-      <p class="eyebrow">Chapter Six</p>
+      <p class="eyebrow">Chapter Seven</p>
       <h2>A Letter</h2>
     </header>
     <article class="letter-body" id="letterBody"></article>

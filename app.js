@@ -864,6 +864,80 @@ document.getElementById('modalClose').addEventListener('click', hideModal);
 modal.addEventListener('click', (e) => { if (e.target === modal) hideModal(); });
 document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && !modal.hidden) hideModal(); });
 
+/* ============ 30 WISHES ============ */
+const wishCard = document.getElementById('wishCard');
+const wishNumber = document.getElementById('wishNumber');
+const wishText = document.getElementById('wishText');
+const wishProgress = document.getElementById('wishProgress');
+const wishPrev = document.getElementById('wishPrev');
+const wishNext = document.getElementById('wishNext');
+let wishIdx = 0;
+
+function renderWish() {
+  const total = WISHES.length;
+  wishText.classList.add('fading');
+  setTimeout(() => {
+    wishNumber.textContent = wishIdx + 1;
+    wishText.textContent = WISHES[wishIdx];
+    wishProgress.textContent = `${wishIdx + 1} / ${total}`;
+    wishPrev.disabled = wishIdx === 0;
+    if (wishIdx === total - 1) {
+      wishCard.classList.add('finale');
+      wishNext.textContent = '♡';
+      wishNext.disabled = true;
+    } else {
+      wishCard.classList.remove('finale');
+      wishNext.textContent = 'next →';
+      wishNext.disabled = false;
+    }
+    wishText.classList.remove('fading');
+  }, 250);
+}
+wishPrev.addEventListener('click', () => { if (wishIdx > 0) { wishIdx--; renderWish(); } });
+wishNext.addEventListener('click', () => { if (wishIdx < WISHES.length - 1) { wishIdx++; renderWish(); } });
+renderWish();
+
+/* ============ STATS BANNER (count-up on scroll into view) ============ */
+const statYearsEl    = document.getElementById('statYears');
+const statPhotosEl   = document.getElementById('statPhotos');
+const statPlacesEl   = document.getElementById('statPlaces');
+const statCaptionEl  = document.getElementById('statCaption');
+const statMemoriesEl = document.getElementById('statMemories');
+const statsBanner    = document.getElementById('stats');
+
+const statTargets = {
+  years: (typeof STATS !== 'undefined' && STATS.years) ? STATS.years : 8,
+  photos: (typeof STATS !== 'undefined' && STATS.photos) ? STATS.photos : journeyPhotos.length,
+  places: (typeof STATS !== 'undefined' && STATS.places) ? STATS.places : (Array.isArray(PLACES) ? PLACES.length : 0),
+};
+if (typeof STATS !== 'undefined') {
+  if (STATS.memoriesLabel) statMemoriesEl.textContent = STATS.memoriesLabel;
+  if (STATS.caption) statCaptionEl.textContent = STATS.caption;
+}
+
+let statsAnimated = false;
+function animateStat(el, target, duration) {
+  const start = performance.now();
+  function step(now) {
+    const t = Math.min(1, (now - start) / duration);
+    const eased = 1 - Math.pow(1 - t, 3);
+    el.textContent = Math.round(eased * target);
+    if (t < 1) requestAnimationFrame(step);
+  }
+  requestAnimationFrame(step);
+}
+const statsObserver = new IntersectionObserver((entries) => {
+  entries.forEach((entry) => {
+    if (entry.isIntersecting && !statsAnimated) {
+      statsAnimated = true;
+      animateStat(statYearsEl,  statTargets.years,  1200);
+      animateStat(statPhotosEl, statTargets.photos, 1600);
+      animateStat(statPlacesEl, statTargets.places, 1400);
+    }
+  });
+}, { threshold: 0.4 });
+statsObserver.observe(statsBanner);
+
 /* ============ LETTER (typewriter on scroll into view) ============ */
 const letterBody = document.getElementById('letterBody');
 const letterSignoff = document.getElementById('letterSignoff');

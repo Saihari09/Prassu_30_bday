@@ -1235,6 +1235,150 @@ h1, h2, h3 { font-family: var(--serif); font-weight: 700; letter-spacing: -0.01e
   margin: 0;
 }
 
+/* ============ 30 WISHES ============ */
+.wishes { padding: 80px 24px; }
+.wish-card {
+  background: linear-gradient(135deg, #fff 0%, #fff5fa 50%, #fff0e0 100%);
+  border-radius: 24px;
+  box-shadow: var(--shadow-card);
+  max-width: 540px;
+  width: 100%;
+  text-align: center;
+  position: relative;
+  padding: 56px 36px 28px;
+  overflow: hidden;
+}
+.wish-card::before {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  background: linear-gradient(135deg, var(--gold), var(--rose), var(--teal), var(--gold));
+  background-size: 300% 300%;
+  border-radius: 24px;
+  z-index: -1;
+  opacity: 0.6;
+  animation: wishGlow 8s ease-in-out infinite;
+}
+@keyframes wishGlow {
+  0%, 100% { background-position: 0% 50%; }
+  50%      { background-position: 100% 50%; }
+}
+.wish-card::after {
+  content: '';
+  position: absolute;
+  inset: 2px;
+  background: linear-gradient(135deg, #fff 0%, #fff5fa 50%, #fff0e0 100%);
+  border-radius: 22px;
+  z-index: -1;
+}
+.wish-number {
+  position: absolute;
+  top: -28px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 64px;
+  height: 64px;
+  background: linear-gradient(135deg, var(--gold), var(--peach), var(--rose));
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--serif);
+  font-size: 1.6rem;
+  font-weight: 700;
+  box-shadow: 0 8px 28px rgba(255, 182, 39, 0.5), 0 0 0 4px rgba(255,255,255,0.8);
+  animation: numberPulse 3s ease-in-out infinite;
+  z-index: 2;
+}
+.wish-body {
+  position: relative;
+  z-index: 1;
+}
+.wish-text {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: clamp(1.3rem, 3.5vw, 1.7rem);
+  line-height: 1.5;
+  margin: 12px 0 28px;
+  color: var(--ink);
+  min-height: 140px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.3s ease;
+}
+.wish-text.fading { opacity: 0; }
+.wish-controls {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+.wish-progress {
+  font-size: 0.9rem;
+  color: var(--ink-soft);
+  letter-spacing: 0.05em;
+}
+.wish-card.finale .wish-text {
+  font-family: var(--script);
+  font-style: normal;
+  font-size: clamp(1.6rem, 4.5vw, 2.2rem);
+  color: var(--rose-deep);
+}
+
+/* ============ STATS BANNER ============ */
+.stats-banner {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
+  max-width: 920px;
+  margin: 0 auto;
+  padding: 60px 24px;
+  text-align: center;
+}
+.stat {
+  background: var(--cream);
+  border-radius: 18px;
+  padding: 26px 16px 22px;
+  box-shadow: var(--shadow-soft);
+  transition: transform 0.35s cubic-bezier(0.2,0.9,0.3,1.3), box-shadow 0.35s;
+}
+.stat:hover {
+  transform: translateY(-6px) scale(1.04);
+  box-shadow: var(--shadow-card);
+}
+.stat-value {
+  font-family: var(--serif);
+  font-size: clamp(2.4rem, 5vw, 3.6rem);
+  font-weight: 700;
+  background: linear-gradient(135deg, var(--rose), var(--rose-deep), var(--gold));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  line-height: 1;
+  margin-bottom: 8px;
+}
+.stat-infinity {
+  font-size: clamp(3rem, 6.5vw, 4.4rem);
+}
+.stat-label {
+  font-family: var(--sans);
+  font-size: 0.85rem;
+  color: var(--ink-soft);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+.stat-label span {
+  display: block;
+  font-family: var(--script);
+  text-transform: none;
+  font-size: 1rem;
+  color: var(--rose-deep);
+  margin-top: 4px;
+  letter-spacing: 0;
+}
+
 /* ============ LETTER ============ */
 .letter { padding: 80px 24px 120px; }
 .letter-body {
@@ -1286,6 +1430,9 @@ h1, h2, h3 { font-family: var(--serif); font-weight: 700; letter-spacing: -0.01e
   .reason-photo { height: 200px; }
   .reason-number { top: 172px; width: 56px; height: 56px; font-size: 1.4rem; }
   .reason-body { padding: 44px 22px 22px; }
+  .stats-banner { grid-template-columns: repeat(2, 1fr); gap: 12px; padding: 40px 16px; }
+  .stat { padding: 18px 10px 14px; }
+  .wish-card { padding: 48px 24px 22px; }
   .journey-grid { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 18px 14px; }
   .lightbox img { max-width: 96vw; max-height: 80vh; }
   .quiz-card { padding: 32px 22px 22px; }

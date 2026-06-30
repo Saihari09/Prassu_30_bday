@@ -218,38 +218,38 @@ const REASONS = [
 const QUIZ = {
   questions: [
     {
-      q: 'Where did we have our first date?',
-      options: ['TODO: option 1', 'TODO: the real one', 'TODO: option 3', 'TODO: option 4'],
-      correct: 1,
-      reward: 'Knew you\'d remember. I still pass that place and smile.',
-      photo: '',
-    },
-    {
-      q: 'What did I say the very first time I called you?',
-      options: ['TODO: option 1', 'TODO: option 2', 'TODO: the real one', 'TODO: option 4'],
+      q: 'Where did we first meet?',
+      options: ['Phoenix Mall — Bengaluru', 'Wipro — Hyderabad', 'Jubilant — Bengaluru', 'IIT Madras campus'],
       correct: 2,
-      reward: 'I rehearsed that line for an hour. You said yes anyway.',
+      reward: 'Jubilant. That elevator. That first hi. We never looked back.',
       photo: '',
     },
     {
-      q: 'What\'s the name of the song that\'s "ours"?',
-      options: ['TODO: option 1', 'TODO: option 2', 'TODO: option 3', 'TODO: the real one'],
+      q: 'What\'s the song that\'s ours?',
+      options: ['Vachindamma', 'Inkem Inkem Kavale', 'Samajavaragamana', 'Butta Bomma'],
+      correct: 2,
+      reward: 'Every time Sid Sriram sings it, I think of you.',
+      photo: '',
+    },
+    {
+      q: 'What do I call you?',
+      options: ['Pinku', 'Buntu', 'Babe', 'Vinju'],
       correct: 3,
-      reward: 'Every time it plays I look at you. Every. Time.',
+      reward: 'My Vinju. Always Vinju.',
       photo: '',
     },
     {
-      q: 'Which trip nearly ended in disaster but became our favorite story?',
-      options: ['TODO: the real one', 'TODO: option 2', 'TODO: option 3'],
-      correct: 0,
-      reward: 'We laugh about that now. Mostly.',
-      photo: '',
-    },
-    {
-      q: 'What\'s my favorite thing about you?',
-      options: ['TODO: option 1', 'TODO: option 2', 'TODO: the real one', 'TODO: option 4'],
+      q: 'Where did we go on our first trip together?',
+      options: ['Coorg', 'Ooty', 'Kodaikanal', 'Munnar'],
       correct: 2,
-      reward: 'And I\'ll never stop being amazed by it.',
+      reward: 'Kodaikanal. The fog, the chai, you in that shawl.',
+      photo: '',
+    },
+    {
+      q: 'What\'s our running joke?',
+      options: ['Ramesh — Suresh', 'Tom — Jerry', 'Anna — Akka', 'Munna — Circuit'],
+      correct: 0,
+      reward: 'Ramesh, Suresh. Always. You laugh every single time.',
       photo: '',
     },
   ],
@@ -291,6 +291,57 @@ const MEMORY_MATCH = {
     // 'photos/match-08.jpg',
   ],
   winMessage: 'You found all the moments. Just like you find me.',
+};
+
+/* ============ 30 WISHES FOR YOUR 30s ============
+   Looking-forward companion to the 30 Reasons.
+   Same card mechanic. Last one is the finale.
+*/
+const WISHES = [
+  'May this decade be the loudest yet.',
+  'May you ask for more, and get it.',
+  'May you keep dancing in the kitchen.',
+  'May your courage outgrow your worry.',
+  'May the world finally see what I see.',
+  'May you fall in love with yourself the way I have.',
+  'May we travel to ten more places we\'ve never heard of.',
+  'May you trust your gut, every time.',
+  'May you let the small things slide.',
+  'May your laugh stay this loud, forever.',
+  'May every Tuesday feel like Friday.',
+  'May you take up more space.',
+  'May you say no when you mean no.',
+  'May your work bring you joy, not just pay.',
+  'May we cook badly and eat happily.',
+  'May you sleep in on Sundays without guilt.',
+  'May the people who love you tell you more often.',
+  'May you outgrow the things that hurt you.',
+  'May we laugh until our jaws ache.',
+  'May you keep surprising me.',
+  'May you stop apologizing for being yourself.',
+  'May your friendships deepen.',
+  'May we adopt that dog.',
+  'May we keep choosing each other, daily.',
+  'May you forgive yourself the way you forgive me.',
+  'May every chai be perfect.',
+  'May we keep our weirdness, all of it.',
+  'May your dreams scale up, not down.',
+  'May the rest of our years be even better than these.',
+  'May I get to love you for fifty more decades. ♡',
+];
+const WISHES_FINALE = 'And that\'s only thirty. I have a lifetime more.';
+
+/* ============ STATS BANNER ============
+   Small strip shown above the letter. Numbers are computed at runtime from
+   JOURNEY_PHOTOS + PLACES, so they stay accurate if you add/remove content.
+   Override any value below to hardcode it.
+*/
+const STATS = {
+  years: 8,          // years together
+  // photos: 82,     // auto-calculated from journey-manifest.js
+  // places: 35,     // auto-calculated from PLACES.length
+  memoriesLabel: '∞',
+  caption: 'and counting',
 };
 
 /* ============ THE LETTER ============
