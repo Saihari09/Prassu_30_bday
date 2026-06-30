@@ -18,7 +18,7 @@ const CONFIG = {
                 These are the "happy birthday" wish.
 */
 const WISH_MOMENT = {
-  heroPhoto: 'photos/journey/IMG_9974.jpg',
+  heroPhoto: 'photos/journey/IMG_8560.JPG',
   music: 'music/Samajavaragamana - Sid Sriram.mp3',
   wishLines: [
     'Today the world celebrates you.',
