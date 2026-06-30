@@ -6,22 +6,20 @@
 
 document.getElementById('footerYear').textContent = new Date().getFullYear();
 
-/* ============ SPARKLES (ambient background flair — DESKTOP ONLY) ============ */
+/* ============ SPARKLES (ambient background flair) ============ */
 (function seedSparkles() {
   const layer = document.getElementById('sparkleLayer');
   if (!layer) return;
-  // Skip ambient sparkles entirely on phones/touch screens. They're a CSS
-  // animation (wall-clock timed, so they can't truly run "fast"), but on some
-  // mobile Safari builds the composited float animation stutters or reads as
-  // jittery/fast, and on a small screen they're just clutter. Desktop keeps
-  // the full effect; phones get a clean look. The cake-tap confetti burst
-  // (which IS the key celebratory moment) still fires on every device.
-  const isMobile = document.documentElement.clientWidth < 700
-    || (window.matchMedia && window.matchMedia('(hover: none) and (pointer: coarse)').matches);
-  if (isMobile) return;
+  // Sparkles run on all devices. They're a wall-clock CSS animation, so they
+  // drift at the same speed everywhere. (The earlier "fast vibrating stars"
+  // on phones was NOT the sparkles' speed — it was the reduce-motion CSS bug
+  // that looped infinite animations ~100,000x/sec; fixed in styles.css.)
+  // Use fewer on small screens since they read denser there and each is a
+  // GPU-composited layer.
+  const isMobile = document.documentElement.clientWidth < 700;
   const glyphs = ['✦', '✧', '✦', '✨', '★', '✺', '·'];
   const colors = ['#ff5a99', '#ffb627', '#ffffff', '#5ee0c1', '#ff9a78', '#d62a78'];
-  const COUNT = 22;
+  const COUNT = isMobile ? 14 : 22;
   for (let i = 0; i < COUNT; i++) {
     const s = document.createElement('span');
     s.className = 'sparkle-particle';
