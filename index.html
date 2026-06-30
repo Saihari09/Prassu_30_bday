@@ -1,0 +1,200 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Happy 30th</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Inter:wght@400;500;600&family=Dancing+Script:wght@600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <!-- ============ LANDING: blow out the candles, then the wish moment ============ -->
+  <section id="landing" class="section landing">
+    <div class="hero-bg" id="heroBg"></div>
+    <div class="hero-vignette"></div>
+
+    <div class="landing-inner">
+      <!-- Before blow: cake + tap prompt -->
+      <div class="cake-wrap" id="cakeWrap">
+        <p class="kicker">tap the candles</p>
+        <div class="cake" id="cake" role="button" tabindex="0" aria-label="Blow out the candles">
+          <div class="candles">
+            <div class="candle"><div class="flame"></div></div>
+            <div class="candle"><div class="flame"></div></div>
+            <div class="candle"><div class="flame"></div></div>
+          </div>
+          <div class="cake-top"></div>
+          <div class="cake-mid"></div>
+          <div class="cake-bot"></div>
+          <div class="plate"></div>
+        </div>
+      </div>
+
+      <!-- After blow: wish moment -->
+      <div class="wish-moment" id="wishMoment">
+        <h1 class="hero-title">
+          <span class="hero-pre">Happy 30th,</span>
+          <span class="hero-name" id="heroName"></span>
+        </h1>
+        <div class="wish-lines" id="wishLines"></div>
+        <button class="scroll-cta" id="scrollCta" aria-label="Begin our story">begin our story →</button>
+      </div>
+    </div>
+
+  </section>
+
+  <canvas id="confetti" class="confetti"></canvas>
+
+  <!-- ============ STICKY NAV ============ -->
+  <nav class="nav" id="nav" aria-hidden="true">
+    <a href="#firsts" id="navFirsts">Firsts</a>
+    <a href="#journey" id="navJourney">Journey</a>
+    <a href="#map">Map</a>
+    <a href="#reasons">Reasons</a>
+    <a href="#quiz">Quiz</a>
+    <a href="#match" id="navMatch">Match</a>
+    <a href="#letter">Letter</a>
+    <button id="muteBtn" class="mute-btn" aria-label="Toggle music" title="Toggle music">♫</button>
+  </nav>
+
+  <!-- ============ FIRSTS — Pick the Memory game ============ -->
+  <section id="firsts" class="section firsts">
+    <header class="section-head">
+      <p class="eyebrow">Chapter One</p>
+      <h2>Our Firsts</h2>
+      <p class="lede">Pick the photo that matches the memory. No wrong answers — but try.</p>
+    </header>
+    <div class="firsts-game" id="firstsGame"></div>
+  </section>
+
+  <!-- ============ JOURNEY (button → album modal) ============ -->
+  <section id="journey" class="section journey-section">
+    <header class="section-head">
+      <p class="eyebrow" id="journeyEyebrow">Chapter Two</p>
+      <h2 id="journeyTitle">Our Journey</h2>
+      <p class="lede" id="journeyLede">Every photo in order. Every one of them us.</p>
+    </header>
+    <div class="journey-teaser" id="journeyTeaser">
+      <div class="teaser-stack" id="teaserStack"></div>
+      <button class="primary-btn open-album-btn" id="openAlbumBtn">
+        <span class="sparkle">✦</span> Open the album <span class="sparkle">✦</span>
+      </button>
+      <p class="teaser-count" id="teaserCount"></p>
+    </div>
+    <p class="journey-empty" id="journeyEmpty" hidden>
+      Drop your photos into <code>photos/journey/</code> and run
+      <code>./scan-photos.sh</code> from the project root. Then refresh.
+    </p>
+  </section>
+
+  <!-- ============ MEMORY MAP ============ -->
+  <section id="map" class="section map-section">
+    <header class="section-head">
+      <p class="eyebrow">Chapter Two</p>
+      <h2>The Places</h2>
+      <p class="lede">Every pin is a memory. Tap one.</p>
+    </header>
+    <div id="leafletMap" class="leaflet-map" aria-label="Map of our memories"></div>
+  </section>
+
+  <!-- ============ 30 REASONS ============ -->
+  <section id="reasons" class="section reasons">
+    <header class="section-head">
+      <p class="eyebrow">Chapter Three</p>
+      <h2>30 Reasons</h2>
+      <p class="lede">One for every year. Take your time.</p>
+    </header>
+    <div class="reason-card" id="reasonCard">
+      <div class="reason-photo" id="reasonPhoto"></div>
+      <div class="reason-number" id="reasonNumber">1</div>
+      <div class="reason-body">
+        <p class="reason-text" id="reasonText"></p>
+        <div class="reason-controls">
+          <button id="reasonPrev" class="ghost-btn" aria-label="Previous reason">←</button>
+          <span class="reason-progress" id="reasonProgress">1 / 30</span>
+          <button id="reasonNext" class="primary-btn" aria-label="Next reason">next →</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ QUIZ ============ -->
+  <section id="quiz" class="section quiz-section">
+    <header class="section-head">
+      <p class="eyebrow">Chapter Four</p>
+      <h2>Do You Remember?</h2>
+      <p class="lede">A little quiz. There are no wrong answers — only us.</p>
+    </header>
+    <div class="quiz-card" id="quizCard"></div>
+  </section>
+
+  <!-- ============ MEMORY MATCH ============ -->
+  <section id="match" class="section match-section">
+    <header class="section-head">
+      <p class="eyebrow">Chapter Five</p>
+      <h2>Match the Moments</h2>
+      <p class="lede">Flip the cards. Find the pairs.</p>
+    </header>
+    <div class="match-stats" id="matchStats">moves: 0 · matches: 0</div>
+    <div class="match-grid" id="matchGrid"></div>
+    <button class="ghost-btn match-reset" id="matchReset" style="margin-top:24px">↻ shuffle</button>
+  </section>
+
+  <!-- ============ LETTER ============ -->
+  <section id="letter" class="section letter">
+    <header class="section-head">
+      <p class="eyebrow">Chapter Six</p>
+      <h2>A Letter</h2>
+    </header>
+    <article class="letter-body" id="letterBody"></article>
+    <p class="signoff" id="letterSignoff"></p>
+  </section>
+
+  <!-- ============ FOOTER ============ -->
+  <footer class="footer">
+    <p>Made with love · <span id="footerYear"></span></p>
+  </footer>
+
+  <!-- Background music (set source in content.js → WISH_MOMENT.music) -->
+  <audio id="bgMusic" loop preload="auto"></audio>
+
+  <!-- ============ ALBUM MODAL (full Journey grid) ============ -->
+  <div class="album-modal" id="albumModal" hidden>
+    <div class="album-header">
+      <h3 class="album-title">Our Album</h3>
+      <button class="album-close" id="albumClose" aria-label="Close album">✕</button>
+    </div>
+    <div class="album-grid" id="journeyGrid"></div>
+  </div>
+
+  <!-- ============ SPARKLE LAYER (decorative) ============ -->
+  <div class="sparkle-layer" id="sparkleLayer" aria-hidden="true"></div>
+
+  <!-- ============ HIDDEN HEARTS counter widget ============ -->
+  <div class="hearts-counter" id="heartsCounter" aria-live="polite" title="Tap any heart you find hidden across the page">
+    <span class="hearts-icon">♡</span>
+    <span class="hearts-count"><span id="heartsFound">0</span> / 30</span>
+    <span class="hearts-hint" id="heartsHint">30 hidden hearts — find them all 💌</span>
+  </div>
+
+  <!-- ============ MODAL (used by both quests and quiz finale) ============ -->
+  <div class="modal" id="modal" hidden>
+    <div class="modal-card">
+      <button class="modal-close" id="modalClose" aria-label="Close">✕</button>
+      <div class="modal-icon" id="modalIcon">♡</div>
+      <h3 class="modal-title" id="modalTitle"></h3>
+      <p class="modal-body" id="modalBody"></p>
+    </div>
+  </div>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+  <script src="content.js"></script>
+  <!-- Journey manifest — generated by scan-photos.sh. Loads quietly if missing. -->
+  <script src="photos/journey-manifest.js" onerror="this.remove()"></script>
+  <script src="app.js"></script>
+</body>
+</html>
