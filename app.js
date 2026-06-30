@@ -12,7 +12,7 @@ document.getElementById('footerYear').textContent = new Date().getFullYear();
   if (!layer) return;
   const glyphs = ['✦', '✧', '✦', '✨', '★', '✺', '·'];
   const colors = ['#ff5a99', '#ffb627', '#ffffff', '#5ee0c1', '#ff9a78', '#d62a78'];
-  const COUNT = 22;
+  const COUNT = 14;
   for (let i = 0; i < COUNT; i++) {
     const s = document.createElement('span');
     s.className = 'sparkle-particle';
@@ -20,12 +20,12 @@ document.getElementById('footerYear').textContent = new Date().getFullYear();
     s.style.left = Math.random() * 100 + 'vw';
     s.style.top = '105vh';
     s.style.color = colors[i % colors.length];
-    s.style.fontSize = (10 + Math.random() * 12) + 'px';
-    const dur = 12 + Math.random() * 18;
+    s.style.fontSize = (9 + Math.random() * 10) + 'px';
+    const dur = 18 + Math.random() * 22;          // slower drift (was 12-30s, now 18-40s)
     const delay = -Math.random() * dur;
     s.style.animationDuration = dur + 's';
     s.style.animationDelay = delay + 's';
-    s.style.setProperty('--sparkle-opacity', (0.35 + Math.random() * 0.45).toString());
+    s.style.setProperty('--sparkle-opacity', (0.25 + Math.random() * 0.4).toString());
     layer.appendChild(s);
   }
 })();
@@ -146,17 +146,42 @@ const COLORS = ['#e85a8a', '#c93b6e', '#d9a441', '#ffc8d8', '#f3d9ff', '#fff5ec'
 function launchConfetti() {
   const w = confettiCanvas.clientWidth;
   const h = confettiCanvas.clientHeight;
-  for (let i = 0; i < 180; i++) {
+  // Spawn in TWO waves: an initial burst from the cake area + an ambient rain
+  // from above the screen. Both fall slowly (terminal ≈ 4 px/frame ≈ 240 px/s)
+  // so the effect lingers ~4–5 seconds and looks like real wedding petals.
+  for (let i = 0; i < 90; i++) {
     confettiParticles.push({
-      x: w / 2 + (Math.random() - 0.5) * 80,
-      y: h / 2 - 40,
-      vx: (Math.random() - 0.5) * 10,
-      vy: -Math.random() * 14 - 4,
-      g: 0.32,
-      size: Math.random() * 7 + 4,
+      x: w / 2 + (Math.random() - 0.5) * 140,
+      y: h / 2 - 30,
+      vx: (Math.random() - 0.5) * 3,      // soft horizontal burst
+      vy: -Math.random() * 4 - 1,          // tiny upward pop
+      g: 0.04,                              // very gentle gravity
+      size: Math.random() * 6 + 5,
       color: COLORS[Math.floor(Math.random() * COLORS.length)],
       rot: Math.random() * Math.PI * 2,
-      vr: (Math.random() - 0.5) * 0.3,
+      vr: (Math.random() - 0.5) * 0.06,
+      wob: Math.random() * Math.PI * 2,
+      wobSpeed: 0.014 + Math.random() * 0.022,
+      drift: (Math.random() - 0.5) * 0.3,
+      life: 0,
+    });
+  }
+  // Ambient rain — fewer pieces drifting in from above so the canvas
+  // doesn't go empty too quickly.
+  for (let i = 0; i < 60; i++) {
+    confettiParticles.push({
+      x: Math.random() * w,
+      y: -20 - Math.random() * h * 0.4,
+      vx: (Math.random() - 0.5) * 0.6,
+      vy: 0.5 + Math.random() * 1.2,
+      g: 0.04,
+      size: Math.random() * 5 + 4,
+      color: COLORS[Math.floor(Math.random() * COLORS.length)],
+      rot: Math.random() * Math.PI * 2,
+      vr: (Math.random() - 0.5) * 0.05,
+      wob: Math.random() * Math.PI * 2,
+      wobSpeed: 0.012 + Math.random() * 0.02,
+      drift: (Math.random() - 0.5) * 0.3,
       life: 0,
     });
   }
@@ -167,21 +192,33 @@ function launchConfetti() {
 }
 
 function tickConfetti() {
-  ctx.clearRect(0, 0, confettiCanvas.clientWidth, confettiCanvas.clientHeight);
+  const w = confettiCanvas.clientWidth;
+  const h = confettiCanvas.clientHeight;
+  ctx.clearRect(0, 0, w, h);
   for (let i = confettiParticles.length - 1; i >= 0; i--) {
     const p = confettiParticles[i];
-    p.vy += p.g;
-    p.x += p.vx;
+    // air resistance — pieces slow quickly, then drift at terminal velocity
+    p.vx *= 0.98;
+    p.vy = p.vy * 0.99 + p.g;   // terminal ≈ 0.04 / 0.01 = 4 px/frame
+    p.wob += p.wobSpeed;
+    p.x += p.vx + p.drift + Math.sin(p.wob) * 0.5;
     p.y += p.vy;
     p.rot += p.vr;
     p.life++;
+    // soft fade near the bottom
+    const fadeStart = h * 0.82;
+    const fade = p.y > fadeStart ? Math.max(0, 1 - (p.y - fadeStart) / (h * 0.18)) : 1;
+    // paper-flip illusion
+    const flip = Math.cos(p.wob) * 0.6 + 0.4;
     ctx.save();
     ctx.translate(p.x, p.y);
     ctx.rotate(p.rot);
+    ctx.scale(1, flip);
+    ctx.globalAlpha = fade * 0.92;
     ctx.fillStyle = p.color;
-    ctx.fillRect(-p.size / 2, -p.size / 4, p.size, p.size / 2);
+    ctx.fillRect(-p.size / 2, -p.size / 5, p.size, p.size / 2.2);
     ctx.restore();
-    if (p.y > confettiCanvas.clientHeight + 40) confettiParticles.splice(i, 1);
+    if (p.y > h + 30 || fade <= 0.01) confettiParticles.splice(i, 1);
   }
   if (confettiParticles.length > 0) requestAnimationFrame(tickConfetti);
   else confettiAnimating = false;
