@@ -187,24 +187,36 @@ function launchConfetti() {
   }
   if (!confettiAnimating) {
     confettiAnimating = true;
+    confettiLastTime = null;
     requestAnimationFrame(tickConfetti);
   }
 }
 
-function tickConfetti() {
+// All per-frame motion below is scaled by `steps` (elapsed time / 16.67ms),
+// not by frame count. Without this, the animation runs 2x too fast on
+// 120Hz/ProMotion phone displays vs a 60Hz laptop, since requestAnimationFrame
+// fires once per *display refresh*, not once per fixed time interval.
+let confettiLastTime = null;
+function tickConfetti(now) {
+  if (confettiLastTime == null) confettiLastTime = now;
+  const rawDelta = now - confettiLastTime;
+  confettiLastTime = now;
+  // cap at 3x a normal frame so a backgrounded-tab resume doesn't teleport particles
+  const steps = Math.min(rawDelta / (1000 / 60), 3);
+
   const w = confettiCanvas.clientWidth;
   const h = confettiCanvas.clientHeight;
   ctx.clearRect(0, 0, w, h);
   for (let i = confettiParticles.length - 1; i >= 0; i--) {
     const p = confettiParticles[i];
     // air resistance — pieces slow quickly, then drift at terminal velocity
-    p.vx *= 0.98;
-    p.vy = p.vy * 0.99 + p.g;   // terminal ≈ 0.04 / 0.01 = 4 px/frame
-    p.wob += p.wobSpeed;
-    p.x += p.vx + p.drift + Math.sin(p.wob) * 0.5;
-    p.y += p.vy;
-    p.rot += p.vr;
-    p.life++;
+    p.vx *= Math.pow(0.98, steps);
+    p.vy = p.vy * Math.pow(0.99, steps) + p.g * steps;
+    p.wob += p.wobSpeed * steps;
+    p.x += (p.vx + p.drift + Math.sin(p.wob) * 0.5) * steps;
+    p.y += p.vy * steps;
+    p.rot += p.vr * steps;
+    p.life += steps;
     // soft fade near the bottom
     const fadeStart = h * 0.82;
     const fade = p.y > fadeStart ? Math.max(0, 1 - (p.y - fadeStart) / (h * 0.18)) : 1;
