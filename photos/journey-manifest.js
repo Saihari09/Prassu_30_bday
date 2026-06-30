@@ -78,9 +78,9 @@ window.JOURNEY_PHOTOS = [
   { src: 'photos/journey/IMG_6995.jpg', date: '2026-03' },
   { src: 'photos/journey/IMG_7266.jpg', date: '2026-04' },
   { src: 'photos/journey/IMG_8148.jpg', date: '2026-06' },
-  { src: 'photos/journey/2a70a712-5862-4c67-ae27-b33ec41ada94.jpg', date: '2026-06' },
   { src: 'photos/journey/5f485f33-b061-4c21-8749-2638c50a39c4.jpg', date: '2026-06' },
   { src: 'photos/journey/IMG_7493.PNG', date: '2026-06' },
-  { src: 'photos/journey/IMG_8755.PNG', date: '2026-06' },
   { src: 'photos/journey/d70513f1-6760-465b-b157-6f1da13e78aa.jpg', date: '2026-06' },
+  { src: 'photos/journey/IMG_8755.PNG', date: '2026-06' },
+  { src: 'photos/journey/2a70a712-5862-4c67-ae27-b33ec41ada94.jpg', date: '2026-06' },
 ];

@@ -64,6 +64,26 @@ if [ "$heic_count" -gt 0 ] && [ -n "$heic_files" ]; then
   fi
 fi
 
+# 2b. Resize + recompress every image for web (max 1600px on the long edge,
+#     78% JPEG quality). Phone photos straight off a camera are often
+#     3000-4000px and several MB each — fine for printing, way oversized for
+#     a webpage. 80+ of those (the album, map pins, reason cards, hero photo
+#     all draw from this pool) adds up to 100+ MB, which times out or fails
+#     to load on mobile data. This step is idempotent — already-small images
+#     are left alone (sips won't upscale, --resampleHeightWidthMax only
+#     shrinks images already larger than the target).
+if command -v sips >/dev/null 2>&1; then
+  echo "Optimizing images for web…"
+  find "$JOURNEY_DIR" -maxdepth 1 -type f \( -iname "*.jpg" -o -iname "*.jpeg" -o -iname "*.png" \) | while read -r img; do
+    [ -z "$img" ] && continue
+    sips --resampleHeightWidthMax 1600 "$img" >/dev/null 2>&1
+    case "$img" in
+      *.jpg|*.JPG|*.jpeg|*.JPEG) sips -s formatOptions 78 "$img" >/dev/null 2>&1 ;;
+    esac
+  done
+  echo "  done."
+fi
+
 # 3. Build the manifest. Use sips's EXIF creation date when available;
 #    fall back to filename pattern (YYYYMMDD), then mtime.
 python3 - "$JOURNEY_DIR" "$OUT" <<'PY'

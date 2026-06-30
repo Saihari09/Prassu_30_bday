@@ -152,10 +152,19 @@ const COLORS = ['#e85a8a', '#c93b6e', '#d9a441', '#ffc8d8', '#f3d9ff', '#fff5ec'
 function launchConfetti() {
   const w = confettiCanvas.clientWidth;
   const h = confettiCanvas.clientHeight;
+  // Scale particle count to screen area. The same 150 particles that look
+  // like a delicate scatter on a 1456×900 laptop screen pack ~4x denser into
+  // a 375×812 phone screen (less area to spread across) and read as a
+  // frantic flurry instead of gentle confetti. Floor at 0.45 so a phone
+  // still gets a satisfying amount, not a sparse trickle.
+  const REFERENCE_AREA = 1456 * 900;
+  const densityScale = Math.max(0.45, Math.min(1, (w * h) / REFERENCE_AREA));
+  const burstCount = Math.round(90 * densityScale);
+  const rainCount = Math.round(60 * densityScale);
   // Spawn in TWO waves: an initial burst from the cake area + an ambient rain
   // from above the screen. Both fall slowly (terminal ≈ 4 px/frame ≈ 240 px/s)
   // so the effect lingers ~4–5 seconds and looks like real wedding petals.
-  for (let i = 0; i < 90; i++) {
+  for (let i = 0; i < burstCount; i++) {
     confettiParticles.push({
       x: w / 2 + (Math.random() - 0.5) * 140,
       y: h / 2 - 30,
@@ -174,7 +183,7 @@ function launchConfetti() {
   }
   // Ambient rain — fewer pieces drifting in from above so the canvas
   // doesn't go empty too quickly.
-  for (let i = 0; i < 60; i++) {
+  for (let i = 0; i < rainCount; i++) {
     confettiParticles.push({
       x: Math.random() * w,
       y: -20 - Math.random() * h * 0.4,
