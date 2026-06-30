@@ -12,7 +12,7 @@ document.getElementById('footerYear').textContent = new Date().getFullYear();
   if (!layer) return;
   const glyphs = ['✦', '✧', '✦', '✨', '★', '✺', '·'];
   const colors = ['#ff5a99', '#ffb627', '#ffffff', '#5ee0c1', '#ff9a78', '#d62a78'];
-  const COUNT = 14;
+  const COUNT = 22;
   for (let i = 0; i < COUNT; i++) {
     const s = document.createElement('span');
     s.className = 'sparkle-particle';
@@ -20,12 +20,12 @@ document.getElementById('footerYear').textContent = new Date().getFullYear();
     s.style.left = Math.random() * 100 + 'vw';
     s.style.top = '105vh';
     s.style.color = colors[i % colors.length];
-    s.style.fontSize = (9 + Math.random() * 10) + 'px';
-    const dur = 18 + Math.random() * 22;          // slower drift (was 12-30s, now 18-40s)
+    s.style.fontSize = (10 + Math.random() * 12) + 'px';
+    const dur = 12 + Math.random() * 18;
     const delay = -Math.random() * dur;
     s.style.animationDuration = dur + 's';
     s.style.animationDelay = delay + 's';
-    s.style.setProperty('--sparkle-opacity', (0.25 + Math.random() * 0.4).toString());
+    s.style.setProperty('--sparkle-opacity', (0.35 + Math.random() * 0.45).toString());
     layer.appendChild(s);
   }
 })();
