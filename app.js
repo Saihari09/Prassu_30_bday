@@ -6,17 +6,22 @@
 
 document.getElementById('footerYear').textContent = new Date().getFullYear();
 
-/* ============ SPARKLES (ambient background flair) ============ */
+/* ============ SPARKLES (ambient background flair — DESKTOP ONLY) ============ */
 (function seedSparkles() {
   const layer = document.getElementById('sparkleLayer');
   if (!layer) return;
+  // Skip ambient sparkles entirely on phones/touch screens. They're a CSS
+  // animation (wall-clock timed, so they can't truly run "fast"), but on some
+  // mobile Safari builds the composited float animation stutters or reads as
+  // jittery/fast, and on a small screen they're just clutter. Desktop keeps
+  // the full effect; phones get a clean look. The cake-tap confetti burst
+  // (which IS the key celebratory moment) still fires on every device.
+  const isMobile = document.documentElement.clientWidth < 700
+    || (window.matchMedia && window.matchMedia('(hover: none) and (pointer: coarse)').matches);
+  if (isMobile) return;
   const glyphs = ['✦', '✧', '✦', '✨', '★', '✺', '·'];
   const colors = ['#ff5a99', '#ffb627', '#ffffff', '#5ee0c1', '#ff9a78', '#d62a78'];
-  // Each sparkle is a GPU-composited (will-change) layer. 22 is fine on a
-  // laptop but heavy on a phone, where it adds to the compositing load.
-  // Use fewer on small screens — they also read denser on a small screen, so
-  // fewer looks the same anyway.
-  const COUNT = (document.documentElement.clientWidth < 700) ? 12 : 22;
+  const COUNT = 22;
   for (let i = 0; i < COUNT; i++) {
     const s = document.createElement('span');
     s.className = 'sparkle-particle';
