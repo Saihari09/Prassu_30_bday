@@ -1521,7 +1521,16 @@ h1, h2, h3 { font-family: var(--serif); font-weight: 700; letter-spacing: -0.01e
 /* reduce motion */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
+    /* CRITICAL: animation-iteration-count MUST be capped to 1 here. Setting
+       only animation-duration: 0.01ms on an `infinite` animation does NOT
+       stop it — it makes it loop ~100,000x/second, which renders as a frantic
+       vibration (the candle flame, the "tap the candles" text, the stars).
+       That's the real cause of "everything is super fast" on phones with
+       iOS Accessibility > Reduce Motion enabled (desktop without it looked
+       fine). Capping iterations to 1 makes each animation run once and stop. */
     animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
   }
 }
